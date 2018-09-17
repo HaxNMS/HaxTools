@@ -15,7 +15,7 @@ REM EXECUTE
 set SCRIPT_DIR=%~dp0
 set PSARC="%SCRIPT_DIR%psarc.exe"
 
-call "%SCRIPT_DIR%\PSARC_PACK.bat" "%SRC%" "%ID%"
+call "%SCRIPT_DIR%\PSARC_PACK.bat" "%SRC%" "%ID%" LIST
 
 REM find most recent pak
 set PAK=

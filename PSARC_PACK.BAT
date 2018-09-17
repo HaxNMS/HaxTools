@@ -4,14 +4,16 @@ setlocal
 REM -------------------------------------------------------------
 REM INITIALIZE
 
-set PSARC="%~dp0\bin\psarc.exe"
-set SRC="%~1"
+set PSARC="%~dp0\psarc.exe"
+set SRC=%~1
 
 set SUFFIX=%~2
 if not "%SUFFIX%"=="" set SUFFIX=-%SUFFIX%
 
+if exist "%SRC%\GAMEDATA" set SRC=%SRC%\GAMEDATA
+
 REM use the name of the parent directory for the pak file
-for %%I in (.) do set NAME=%%~nxI
+for %%I in ( "%~1" ) do set NAME=%%~nxI
 
 REM append SUFFIX to NAME
 set NAME=%NAME%%SUFFIX%
@@ -22,7 +24,7 @@ if "%SUFFIX%"=="" set /a ID=1
 :NEXT_ID
     set TMP_NAME=%NAME%
     if not "%ID%"=="0" set TMP_NAME=%TMP_NAME%-%ID%
-    if not EXIST "%TMP_NAME%.pak" goto FOUND_ID
+    if not exist "%TMP_NAME%.pak" goto FOUND_ID
     set /a ID=%ID%+1
     goto NEXT_ID
     :FOUND_ID
@@ -38,14 +40,14 @@ set PAK_NAME=%NAME%.pak
 REM -------------------------------------------------------------
 REM EXECUTE
 
-dir /b /s /a-d %SRC% > "%PAK_LIST%.tmp"
+dir /b /s /a-d "%SRC%" > "%PAK_LIST%.tmp"
 echo( > "%PAK_LIST%"
 for /F "usebackq delims=" %%I in ("%PAK_LIST%.tmp") do (
     call :IMPORT_FILE "%%~I" >> "%PAK_LIST%"
 )
 del /q "%PAK_LIST%.tmp" > nul
 
-%PSARC% create -y --strip=%SRC% --inputfile="%PAK_LIST%" --output="%PAK_NAME%"
+%PSARC% create -y --strip="%SRC%" --inputfile="%PAK_LIST%" --output="%PAK_NAME%"
 %PSARC% verify "%PAK_NAME%"
 del /q "%PAK_LIST%" > nul
 

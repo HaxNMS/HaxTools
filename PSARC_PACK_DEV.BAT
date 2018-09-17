@@ -4,7 +4,7 @@ setlocal
 REM -------------------------------------------------------------
 REM INITIALIZE
 
-set SRC=%~1
+set SRC="%~1"
 
 REM get the date stamp and split into components
 set CURRENT_DATE=%date:~4%
@@ -18,12 +18,12 @@ set HRS=%CURRENT_TIME:~0,2%
 set HRS=%HRS: =0%
 set MIN=%CURRENT_TIME:~3,2%
 
-set TIMESTAMP=%YYYY%%MM%%DD%.%HRS%.%MIN%
+set "TIMESTAMP=%YYYY%%MM%%DD%.%HRS%.%MIN%"
 
 
 REM -------------------------------------------------------------
 REM EXECUTE
 
-call "%~dp0\PSARC_PACK.bat" "%SRC%" "%TIMESTAMP%"
+call "%~dp0\PSARC_PACK.bat" %SRC% %TIMESTAMP%
 
 exit /b
