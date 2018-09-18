@@ -4,7 +4,7 @@ setlocal
 REM -------------------------------------------------------------
 REM INITIALIZE
 
-set PSARC="%~dp0\psarc.exe"
+set PSARC="%~dp0\bin\psarc.exe"
 set SRC=%~1
 
 set SUFFIX=%~2

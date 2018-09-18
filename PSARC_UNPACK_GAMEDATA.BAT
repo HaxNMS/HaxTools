@@ -4,7 +4,7 @@ setlocal
 REM -------------------------------------------------------------
 REM INITIALIZE
 
-set PSARC="%~dp0\psarc.exe"
+set PSARC="%~dp0\bin\psarc.exe"
 
 REM -------------------------------------------------------------
 REM EXECUTE

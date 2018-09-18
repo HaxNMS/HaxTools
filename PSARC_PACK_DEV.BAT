@@ -24,6 +24,6 @@ set "TIMESTAMP=%YYYY%%MM%%DD%.%HRS%.%MIN%"
 REM -------------------------------------------------------------
 REM EXECUTE
 
-call "%~dp0\PSARC_PACK.bat" %SRC% %TIMESTAMP%
+call "%~dp0\PSARC_PACK.BAT" %SRC% %TIMESTAMP%
 
 exit /b
