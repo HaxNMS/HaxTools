@@ -7,20 +7,24 @@ REM INITIALIZE
 set PSARC="%~dp0\bin\psarc.exe"
 set SRC=%~f1
 if "%~nx1"=="GAMEDATA" set SRC=%~dp1
-echo SRC=%SRC%
 if "%SRC:~-1%"=="\" set SRC=%SRC:~0,-1%
-echo SRC=%SRC%
 
 set SUFFIX=%~2
-if not "%SUFFIX%"=="" set SUFFIX=-%SUFFIX%
+if        "%SUFFIX:~0,1%"=="-" (
+    REM do nothing
+) else if "%SUFFIX:~0,1%"=="_" (
+    REM do nothing
+) else if "%SUFFIX:~0,1%"==" " (
+    REM do nothing
+) else if not "%SUFFIX%"=="" (
+    set SUFFIX=-%SUFFIX%
+)
 
 set GAMEDATA=%SRC%\GAMEDATA
 if not exist "%GAMEDATA%" set GAMEDATA=%SRC%
-echo GAMEDATA=%GAMEDATA%
 
 REM use the name of the parent directory for the pak file
 for %%I in ( "%SRC%" ) do set NAME=%%~nxI
-echo NAME=%NAME%
 
 REM append SUFFIX to NAME
 set NAME=%NAME%%SUFFIX%
