@@ -1,5 +1,5 @@
 @echo off 
-setlocal
+setlocal EnableDelayedExpansion
 
 REM -------------------------------------------------------------
 REM INITIALIZE
@@ -31,26 +31,26 @@ set NAME=%NAME%%SUFFIX%
 
 REM make sure the name is unique
 set /a ID=0
-if not "%SUFFIX%"=="" (
-    if not exist "%NAME%.pak" goto FOUND_ID
-)
+if not exist "%NAME%.pak" goto FOUND_ID
 
 REM if there is no suffix or the name is not unique, then find
 REM the most recent pak matching the name-version.pak pattern
 :NEXT_ID
-    set LATEST=
-    for /F "usebackq delims=" %%I in (`dir /b /a-d /od "%NAME%-*.pak"`) do set LATEST=%%~nI
-    set /a ID=%LATEST:!NAME!-=%
-    set /a ID=%ID%+1
+    set /a ID=%ID% + 1
+    for /F "usebackq delims=" %%I in (`dir /b /a-d /od "%NAME%*.pak"`) do set LATEST=%%~nI
+    set LATEST=!LATEST:%NAME%=!
+    if "%LATEST%"=="" goto FOUND_ID
+    if "%LATEST:~0,1%"=="-" set LATEST=%LATEST:~1%
+    if "%LATEST%"=="" goto FOUND_ID
+    set /a ID=%LATEST% + 1
 
 :FOUND_ID
     if not "%ID%"=="0" set NAME=%NAME%-%ID%
 
 set PAK_LIST=%NAME%-pak_list.txt
 
-REM append VERSIONSTAMP and extension to NAME
-set PAK_NAME=%NAME%.pak
-
+REM append extension to NAME
+set PAK=%NAME%.pak
 
 REM -------------------------------------------------------------
 REM EXECUTE
@@ -62,11 +62,11 @@ for /F "usebackq delims=" %%I in ("%PAK_LIST%.tmp") do (
 )
 del /q "%PAK_LIST%.tmp" > nul
 
-%PSARC% create -y --strip="%GAMEDATA%" --inputfile="%PAK_LIST%" --output="%PAK_NAME%"
-%PSARC% verify "%PAK_NAME%"
+%PSARC% create -y --strip="%GAMEDATA%" --inputfile="%PAK_LIST%" --output="%PAK%"
+%PSARC% verify "%PAK%"
 del /q "%PAK_LIST%" > nul
 
-exit /b
+goto END
 
 REM -------------------------------------------------------------
 REM FUNCTIONS
@@ -92,6 +92,10 @@ REM FUNCTIONS
     REM not a valid asset type
     exit /b
     
-    :DO_IMPORT
+:DO_IMPORT
     echo %~1
+    exit /b
+
+:END
+    pause
     exit /b

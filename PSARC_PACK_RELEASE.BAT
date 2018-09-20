@@ -8,7 +8,7 @@ set SRC=%~1
 set ID=%~2
 
 REM use the name of the parent directory for the pak file
-for %%I in (.) do set NAME=%~dp1
+set NAME=%~dp1
 
 REM -------------------------------------------------------------
 REM EXECUTE
