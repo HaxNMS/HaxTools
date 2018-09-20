@@ -97,5 +97,4 @@ REM FUNCTIONS
     exit /b
 
 :END
-    pause
     exit /b
