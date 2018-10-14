@@ -55,6 +55,7 @@ set PAK=%NAME%.pak
 REM -------------------------------------------------------------
 REM EXECUTE
 
+REM generate the import list for psarc
 dir /b /s /a-d "%GAMEDATA%" > "%PAK_LIST%.tmp"
 echo( > "%PAK_LIST%"
 for /F "usebackq delims=" %%I in ("%PAK_LIST%.tmp") do (

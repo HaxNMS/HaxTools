@@ -32,12 +32,15 @@ for %%I in ("*.pak") do (
 
 if not exist "%PAK_LIST%" (
   echo] "%SRC%" does not contain any pak files.
-  goto DONE
+  goto ERROR
 )
 
 echo] Created "%PAK_LIST%"
+goto DONE
+
+:ERROR
+	pause
 
 :DONE
 popd
-pause
 exit /b
