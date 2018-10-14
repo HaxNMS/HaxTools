@@ -1,15 +1,15 @@
-@echo off 
-setlocal enabledelayedexpansion
-
-echo PSARC_LIST.BAT
-echo by Gaticus Hax
-echo] 
-echo Drag-n-drop either a single pak file or a folder containing pak files onto
-echo this script. A list of archived files for each pak will be dumped
-echo to a pak_list.txt file in the same directory.
-echo If a single pak file is specified, the pak_list.txt file will be prepended
-echo with the name of the pak.
-
+@echo]************************************************************
+@echo]*  
+@echo]*  %~nx0
+@echo]*  
+@echo]*  Drag-n-drop one or more pak files or folders containing pak files onto
+@echo]*  this script. A list of archived files for each pak will be dumped
+@echo]*  to a pak_list.txt file in the same directory.
+@echo]* 
+@echo]************************************************************
+@echo]  
+@echo off
+setlocal
 
 REM -------------------------------------------------------------
 REM INITIALIZE
@@ -19,26 +19,35 @@ set PSARC="%~dp0\bin\psarc.exe"
 REM -------------------------------------------------------------
 REM EXECUTE
 
-if not exist "%~1" (
-	echo "%~1" does not exist!
-	goto ERROR
-)
+REM NOTHING TO DO?
+if "%~1"=="" goto EOF
 
-REM file or a directory?
-:MODE_SELECTOR
+REM MAIN LOOP
+:NEXT
+    if "%~1"=="" goto EOF
+    call :VALIDATE_PATH_EXISTS %1 || goto EOF
+    call :DETECT_FOLDER %1 && call :LIST_FOLDER %1 || call :LIST_FILE %1
+    shift & goto NEXT
+
+SANITY CHECK: This should never be reached!
+    
+REM -------------------------------------------------------------
+REM FUNCTIONS
+
+REM returns 0 (success) or 1 (fail)
+:VALIDATE_PATH_EXISTS
+    if not exist %1 call :ERROR %1 does not exist! & exit /b 1
+    exit /b 0
+
+REM Detects if %1 is a directory or a file.
+REM returns 0 (folder) or 1 (file)
+:DETECT_FOLDER
+    setlocal
 	set attr=%~a1
-	set dflag=%attr:~0,1%
-	REM set rflag=%attr:~1,1%
-	REM set aflag=%attr:~2,1%
-	REM set hflag=%attr:~3,1%
-
-	REM if dflag is 'd', srcTYPE will be FOLDER, otherwise it will be '-'
-	set srcType=%dflag:d=FOLDER%
-	REM if srcType is '-' it will be replaced with FILE
-	set srcType=%srcType:-=FILE%
-
-	goto LIST_%srcType%
-
+	set attr=%attr:~0,1%
+    set attr=%attr:-=%
+    if not defined attr exit /b 1
+    exit /b 0
 
 :LIST_FILE
 	pushd "%~dp1"
@@ -48,13 +57,12 @@ REM file or a directory?
 	echo %PAK%
 	%PSARC% list "%PAK%" > "%PAK_LIST%"
 
-	echo Created "%PAK_LIST%"
-	goto DONE
+	echo Created "%PAK_LIST%" & goto DONE
 
 :LIST_FOLDER
 	pushd "%~1"
 
-	set PAK_LIST=pak_list.txt
+	set PAK_LIST=../%~n1.pak_list.txt
 	if exist "%PAK_LIST%" del /q "%PAK_LIST%"
 
 	for %%I in ("*.pak") do (
@@ -64,19 +72,16 @@ REM file or a directory?
 	)
 
 	if not exist "%PAK_LIST%" (
-	  echo "%SRC%" does not contain any pak files.
-	  goto ERROR
+	  call :ERROR "%SRC%" does not contain any pak files. & goto DONE
 	)
 
 	echo Created "%PAK_LIST%"
-	goto DONE
-
-
+    goto DONE
+        
 :ERROR
-	pause
+    echo %* & echo] & pause & exit /b
 
 :DONE
-	popd
+    popd & exit /b
 
 :EOF
-	exit /b
