@@ -1,0 +1,15 @@
+Using CheatEngine with NMS:
+-Roll through its built-in tutorials if you want, alternatively skip ahead.
+-Make sure you have a Hex Editor of some sort to view the MBIN files with. Notepad++ has a rough built-in Hex Editor you can use, but there are many alternatives.
+-Look for a line of bytes at offset 0x60 (00000060), it should appear like: 
+
+00 00 01 00 00 01 01 00 00 80 BB 44 00 00 80 3F
+
+-In Cheat Engine, set Value Type to Array of Byte and copy over the line of bytes then hit First Scan. If done correctly, you should have a single hit to work from.
+
+-Right click the Found entry in the left column and select Browse this memory region. This should open a new window with what appears to be gibberish.
+
+-In the bottom field of this new window (called Memory Viewer), right click and go to Display Type. Choose Float, as this is generally the data type NMS' variables use. 
+
+
+
