@@ -63,7 +63,7 @@ for /F "usebackq delims=" %%I in ("%PAK_LIST%.tmp") do (
 )
 del /q "%PAK_LIST%.tmp" > nul
 
-%PSARC% create -y --strip="%GAMEDATA%" --inputfile="%PAK_LIST%" --output="%PAK%"
+%PSARC% create -y --ignorecase --strip="%GAMEDATA%" --inputfile="%PAK_LIST%" --output="%PAK%"
 %PSARC% verify "%PAK%"
 del /q "%PAK_LIST%" > nul
 
@@ -73,22 +73,23 @@ REM -------------------------------------------------------------
 REM FUNCTIONS
 
 :IMPORT_FILE
-    if "%~x1"==".DDS"      goto DO_IMPORT
-    if "%~x1"==".MBIN"     goto DO_IMPORT
-    if "%~x1"==".BIN"      goto DO_IMPORT
-    if "%~x1"==".H"        goto DO_IMPORT
-    if "%~x1"==".GLSL"     goto DO_IMPORT
-    if "%~x1"==".PC"       goto DO_IMPORT
-    if "%~x1"==".SQS"      goto DO_IMPORT
-    if "%~x1"==".TXT"      goto DO_IMPORT
-    if "%~x1"==".CSV"      goto DO_IMPORT
-    if "%~x1"==".WEM"      goto DO_IMPORT
-    if "%~x1"==".BNK"      goto DO_IMPORT
-    if "%~x1"==".XML"      goto DO_IMPORT
-    if "%~x1"==".TTC"      goto DO_IMPORT
-    if "%~x1"==".TTF"      goto DO_IMPORT
-    if "%~x1"==".FNT"      goto DO_IMPORT
-    if "%~x1"==".JSON"     goto DO_IMPORT
+    call "%~dp0\lib\validate_asset.bat" %1 && echo %~1
+    REM if /i "%~x1"==".DDS"      goto DO_IMPORT
+    REM if /i "%~x1"==".MBIN"     goto DO_IMPORT
+    REM if /i "%~x1"==".BIN"      goto DO_IMPORT
+    REM if /i "%~x1"==".H"        goto DO_IMPORT
+    REM if /i "%~x1"==".GLSL"     goto DO_IMPORT
+    REM if /i "%~x1"==".PC"       goto DO_IMPORT
+    REM if /i "%~x1"==".SQS"      goto DO_IMPORT
+    REM if /i "%~x1"==".TXT"      goto DO_IMPORT
+    REM if /i "%~x1"==".CSV"      goto DO_IMPORT
+    REM if /i "%~x1"==".WEM"      goto DO_IMPORT
+    REM if /i "%~x1"==".BNK"      goto DO_IMPORT
+    REM if /i "%~x1"==".XML"      goto DO_IMPORT
+    REM if /i "%~x1"==".TTC"      goto DO_IMPORT
+    REM if /i "%~x1"==".TTF"      goto DO_IMPORT
+    REM if /i "%~x1"==".FNT"      goto DO_IMPORT
+    REM if /i "%~x1"==".JSON"     goto DO_IMPORT
 
     REM not a valid asset type
     exit /b
