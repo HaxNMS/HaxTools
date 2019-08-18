@@ -11,69 +11,53 @@ set REPLACE="%REPLACE_SCRIPT%" "%DST_FILE%"
 
 copy /y "%SRC_FILE%" "%DST_FILE%" > nul
 
-REM : strip [b]*[/b]
-%REPLACE% "\[b\]" ""
-%REPLACE% "\[/b\]" ""
+REM : convert [b]*[/b]
+%REPLACE% "\[b\](.*)\[/b\]" "**$1**"
 
-REM : strip [i]*[/i]
-%REPLACE% "\[i\]" ""
-%REPLACE% "\[/i\]" ""
+REM : convert [i]*[/i]
+%REPLACE% "\[i\](.*)\[/i\]" "_$1_"
 
-REM : strip [u]*[/u]
-%REPLACE% "\[u\]" ""
-%REPLACE% "\[/u\]" ""
+REM : convert [u]*[/u]
+%REPLACE% "\[u\](.*)\[/u\]" "_**$1**_"
 
-REM : convert [s]*[/s] to [strike]*[/strike]
-%REPLACE% "\[s\]" "[strike]"
-%REPLACE% "\[/s\]" "[/strike]"
+REM : convert [s]*[/s]
+%REPLACE% "\[s\](.*)\[/s\]" "~~$1~~"
 
-REM ! leave quote tags ([quote]*[/quote])
-REM %REPLACE% "\[quote\]" ""
-REM %REPLACE% "\[/quote\]" ""
+REM : convert [quote]*[/quote]
+%REPLACE% "\[quote\](.*)\[/quote\]" "> $1"
 
-REM ! leave image tags ([img]*[/img])
-REM %REPLACE% "\[img\]" ""
-REM %REPLACE% "\[/img\]" ""
+REM : convert [img]*[/img]
+%REPLACE% "\[img\](.*)\[/img\]" "![image]($1)"
 
-REM : convert [youtube]*[/youtube] to https://youtu.be/*
-%REPLACE% "\[youtube\]" "https://youtu.be/"
-%REPLACE% "\[/youtube\]" ""
+REM : convert [youtube]*[/youtube]
+%REPLACE% "\[youtube\](.*)\[/youtube\]" "[youtube](https://youtu.be/$1)"
 
-REM : convert [url="$1"]$2[/url] to $2: $1
-%REPLACE% "\[url=\x22?([^\x22\[\]]*)\x22?\](.*)\[/url\]" "$2: $1"
+REM : convert [url="$1"]$2[/url]
+%REPLACE% "\[url=\x22?([^\x22\[\]]*)\x22?\](.*)\[/url\]" "[$2]($1)"
 
 REM : strip [font="*"]*[/font]
-%REPLACE% "\[font=[^\]]*\]" ""
-%REPLACE% "\[/font\]" ""
+%REPLACE% "\[font=[^\]]*\](.*)\[/font\]" "$1"
 
 REM : convert [size="6"]*[/size] to # Heading
-%REPLACE% "\[size=6\]" "# "
-%REPLACE% "\[/size\]" ""
+%REPLACE% "\[size=6\](.*)\[/size\]" "# $1"
 
 REM : convert [size="5"]*[/size] to ## Heading
-%REPLACE% "\[size=5\]" "## "
-%REPLACE% "\[/size\]" ""
+%REPLACE% "\[size=5\](.*)\[/size\]" "## $1"
 
 REM : strip [size="4"]*[/size] to ### Heading
-%REPLACE% "\[size=4\]" "### "
-%REPLACE% "\[/size\]" ""
+%REPLACE% "\[size=4\](.*)\[/size\]" "### $1"
 
 REM : strip any other [size="*"]*[/size]
-%REPLACE% "\[size=[^\]]*\]" ""
-%REPLACE% "\[/size\]" ""
+%REPLACE% "\[size=[^\]]*\](.*)\[/size\]" "$1"
 
 REM : strip [color="*"]*[/color]
-%REPLACE% "\[color=[^\]]*\]" ""
-%REPLACE% "\[/color\]" ""
+%REPLACE% "\[color=[^\]]*\](.*)\[/color\]" "$1"
 
 REM : strip [left]*[/left]
-%REPLACE% "\[left\]" ""
-%REPLACE% "\[/left\]" ""
+%REPLACE% "\[left\](.*)\[/left\]" "$1"
 
 REM : strip [center]*[/center]
-%REPLACE% "\[center\]" ""
-%REPLACE% "\[/center\]" ""
+%REPLACE% "\[center\](.*)\[/center\]" "$1"
 
 REM : strip [right]*[/right]
-%REPLACE% "\[right\]" ""
-%REPLACE% "\[/right\]" ""
+%REPLACE% "\[right\](.*)\[/right\]" "$1"
