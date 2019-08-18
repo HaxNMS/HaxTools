@@ -1,14 +1,15 @@
 @echo off
 
 set SCRIPT_PATH=%~dp0
-set REPLACE_SCRIPT="%SCRIPT_PATH%replace.vbs"
+set REPLACE_SCRIPT=%SCRIPT_PATH%replace.vbs
 
-set SRC_FILE=%1
-set DST_FILE="%~dpn1.txt"
+set SRC_FILE=%~1
+set DST_FILE=%~2
+if "%DST_FILE%"=="" set DST_FILE=%~dpn1.md
 
-set REPLACE=%REPLACE_SCRIPT% %DST_FILE%
+set REPLACE="%REPLACE_SCRIPT%" "%DST_FILE%"
 
-copy /y %SRC_FILE% %DST_FILE% > nul
+copy /y "%SRC_FILE%" "%DST_FILE%" > nul
 
 REM : strip [b]*[/b]
 %REPLACE% "\[b\]" ""
