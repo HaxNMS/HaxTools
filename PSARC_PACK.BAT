@@ -39,10 +39,10 @@ REM the most recent pak matching the name-version.pak pattern
     set /a ID=%ID% + 1
     for /F "usebackq delims=" %%I in (`dir /b /a-d /od "%NAME%*.pak"`) do set LATEST=%%~nI
     set LATEST=!LATEST:%NAME%=!
-    if "%LATEST%"=="" goto FOUND_ID
-    if "%LATEST:~0,1%"=="-" set LATEST=%LATEST:~1%
-    if "%LATEST%"=="" goto FOUND_ID
-    set /a ID=%LATEST% + 1
+           if "%LATEST:~0,1%"=="-" ( set LATEST=%LATEST:~1%
+    ) else if "%LATEST:~0,1%"=="_" ( set LATEST=%LATEST:~1%
+    ) else if "%LATEST:~0,1%"==" " ( set LATEST=%LATEST:~1% )
+    if not "%LATEST%"=="" set /a ID=%LATEST% + 1
 
 :FOUND_ID
     if not "%ID%"=="0" set NAME=%NAME%-%ID%
@@ -73,30 +73,11 @@ REM -------------------------------------------------------------
 REM FUNCTIONS
 
 :IMPORT_FILE
-    call "%~dp0\lib\validate_asset.bat" %1 && echo %~1
-    REM if /i "%~x1"==".DDS"      goto DO_IMPORT
-    REM if /i "%~x1"==".MBIN"     goto DO_IMPORT
-    REM if /i "%~x1"==".BIN"      goto DO_IMPORT
-    REM if /i "%~x1"==".H"        goto DO_IMPORT
-    REM if /i "%~x1"==".GLSL"     goto DO_IMPORT
-    REM if /i "%~x1"==".PC"       goto DO_IMPORT
-    REM if /i "%~x1"==".SQS"      goto DO_IMPORT
-    REM if /i "%~x1"==".TXT"      goto DO_IMPORT
-    REM if /i "%~x1"==".CSV"      goto DO_IMPORT
-    REM if /i "%~x1"==".WEM"      goto DO_IMPORT
-    REM if /i "%~x1"==".BNK"      goto DO_IMPORT
-    REM if /i "%~x1"==".XML"      goto DO_IMPORT
-    REM if /i "%~x1"==".TTC"      goto DO_IMPORT
-    REM if /i "%~x1"==".TTF"      goto DO_IMPORT
-    REM if /i "%~x1"==".FNT"      goto DO_IMPORT
-    REM if /i "%~x1"==".JSON"     goto DO_IMPORT
-
-    REM not a valid asset type
+    call "%~dp0\lib\validate_asset.bat" %1
+    if %ERRORLEVEL%==1 exit /b
+    echo]%~1
     exit /b
     
-:DO_IMPORT
-    echo %~1
-    exit /b
-
 :END
+    endlocal && set NAME=%NAME%
     exit /b

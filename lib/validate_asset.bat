@@ -2,7 +2,7 @@
 REM returns ERRORLEVEL 0 if passed
 REM returns ERRORLEVEL 1 if failed
 
-set VALID_TYPES=DDS MBIN BIN H GLSL PC SQS TXT CSV WEM BNK XML TTC TTF FNT JSON
+set VALID_TYPES=DDS MBIN BIN H GLSL SPV PC SQS TXT CSV WEM BNK XML TTC TTF FNT JSON
 for %%I in (%VALID_TYPES%) do if /i "%~x1"==".%%I" exit /b 0
 REM invalid asset type
 exit /b 1
